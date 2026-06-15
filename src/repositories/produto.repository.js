@@ -11,7 +11,7 @@ const produtoRepository = {
     selecionarPorId: async (id) => {
         const sql = 'SELECT * FROM produtos WHERE id_produto = ?';
         const [rows] = await connection.execute(sql, [id]);
-        return rows; 
+        return rows;
     },
 
     inserirProduto: async (produto) => {
@@ -53,26 +53,26 @@ const produtoRepository = {
             const sql = `UPDATE produtos SET nome_produto = ?, preco_produto = ?, estoque_produto = ?, descricao_produto = ?, imagem_produto = ?, id_categoria = ? WHERE id_produto = ?`;
 
             const values = [
-                produto.nome_produto,
-                produto.preco_produto,
-                produto.estoque_produto,
-                produto.descricao_produto,
-                produto.imagem_produto,
-                produto.id_categoria,
-                produto.id_produto
+                produto.nome_produto ?? null,
+                produto.preco_produto ?? null,
+                produto.estoque_produto ?? null,
+                produto.descricao_produto ?? null,
+                produto.imagem_produto ?? null,
+                produto.id_categoria ?? null,
+                produto.id_produto ?? null
             ];
 
             const [result] = await conn.execute(sql, values);
 
             await conn.commit();
-
             return result;
 
         } catch (error) {
-            await conn.rollback();
+            // Blinda o rollback para o caso de a conexão falhar antes de iniciar a transação
+            if (conn) await conn.rollback();
             throw error;
         } finally {
-            conn.release();
+            if (conn) conn.release();
         }
     },
 
@@ -102,7 +102,7 @@ const produtoRepository = {
     selectPedidoProduto: async (id) => {
         const sql = 'SELECT * FROM itens_pedido WHERE id_produto = ?;';
         const values = [id];
-        const [rows] = await connection.execute (sql, values);
+        const [rows] = await connection.execute(sql, values);
         return rows;
     }
 };
