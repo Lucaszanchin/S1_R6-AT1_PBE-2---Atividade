@@ -38,6 +38,8 @@ class Database {
     }
 }
 
+export const connection = Database.getInstance().getPool();
+
 export async function initializeDatabase() {
     console.log("Inicializando o banco de dados e tabelas com base no schema real...");
     try {

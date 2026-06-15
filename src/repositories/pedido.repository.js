@@ -1,4 +1,4 @@
-import { db } from "../configs/Database.js";
+import { connection } from "../configs/Database.js";
 import produtoRepository from "./produto.repository.js";
 
 const pedidoRepository = {
