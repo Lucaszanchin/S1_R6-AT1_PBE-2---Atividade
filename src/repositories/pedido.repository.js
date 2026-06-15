@@ -4,7 +4,7 @@ import produtoRepository from "./produto.repository.js";
 const pedidoRepository = {
 
     criarPedido: async (pedido, itensPedido) => {
-        const conn = await db.getConnection();
+        const conn = await connection.getConnection();
         try {
             await conn.beginTransaction();
 
@@ -38,7 +38,7 @@ const pedidoRepository = {
     },
 
     adicionarItemPedido: async (pedido, item) => {
-        const conn = await db.getConnection();
+        const conn = await connection.getConnection();
 
         try {
             await conn.beginTransaction();
@@ -64,18 +64,18 @@ const pedidoRepository = {
 
     selectPedidos: async () => {
         const sql = "SELECT * FROM pedidos;";
-        const [rows] = await db.execute(sql);
+        const [rows] = await connection.execute(sql);
         return rows;
     },
 
     selectPedidosId: async (id) => {
         const sql = "SELECT * FROM pedidos WHERE id_pedido = ?;";
-        const [rows] = await db.execute(sql, [id]);
+        const [rows] = await connection.execute(sql, [id]);
         return rows;
     },
 
     atualizarItemPedido: async (item, idPedido, quantidadeAntiga) => {
-        const conn = await db.getConnection();
+        const conn = await connection.getConnection();
 
         try {
             await conn.beginTransaction();
@@ -112,11 +112,11 @@ const pedidoRepository = {
 
     buscarItemPorId: async (id) => {
         const sql = "SELECT * FROM itens_pedido WHERE id_item_pedido = ?;";
-        const [rows] = await db.execute(sql, [id]);
+        const [rows] = await connection.execute(sql, [id]);
         return rows;
     },
     deletarItemPedido: async (id, itemDeletado, idPedido) => {
-        const conn = await db.getConnection();
+        const conn = await connection.getConnection();
 
         try {
             await conn.beginTransaction();

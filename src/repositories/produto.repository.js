@@ -4,18 +4,18 @@ const produtoRepository = {
 
     selecionarTodos: async () => {
         const sql = `SELECT p.estoque_produto, p.id_produto, p.nome_produto, p.preco_produto, p.imagem_produto, p.id_categoria, c.nome_categoria AS categoria FROM produtos p INNER JOIN categorias c ON p.id_categoria = c.id_categoria`;
-        const [rows] = await db.execute(sql);
+        const [rows] = await connection.execute(sql);
         return rows;
     },
 
     selecionarPorId: async (id) => {
         const sql = 'SELECT * FROM produtos WHERE id_produto = ?';
-        const [rows] = await db.execute(sql, [id]);
+        const [rows] = await connection.execute(sql, [id]);
         return rows; 
     },
 
     inserirProduto: async (produto) => {
-        const conn = await db.getConnection();
+        const conn = await connection.getConnection();
 
         try {
             await conn.beginTransaction();
@@ -45,7 +45,7 @@ const produtoRepository = {
     },
 
     atualizarProduto: async (produto) => {
-        const conn = await db.getConnection();
+        const conn = await connection.getConnection();
 
         try {
             await conn.beginTransaction();
@@ -78,7 +78,7 @@ const produtoRepository = {
 
 
     deletarProduto: async (id) => {
-        const conn = await db.getConnection();
+        const conn = await connection.getConnection();
 
         try {
             await conn.beginTransaction();
@@ -102,7 +102,7 @@ const produtoRepository = {
     selectPedidoProduto: async (id) => {
         const sql = 'SELECT * FROM itens_pedido WHERE id_produto = ?;';
         const values = [id];
-        const [rows] = await db.execute (sql, values);
+        const [rows] = await connection.execute (sql, values);
         return rows;
     }
 };
