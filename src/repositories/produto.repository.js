@@ -1,4 +1,4 @@
-import { connection } from "../configs/Database";
+import { connection } from "../configs/database";
 
 const produtoRepository = {
 
