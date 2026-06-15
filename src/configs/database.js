@@ -51,13 +51,14 @@ export async function initializeDatabase() {
             ssl: { rejectUnauthorized: false }
         });
 
-        // Garante o uso do banco correto (padrão technova_database caso não configurado)
         const dbName = process.env.DB_DATABASE || 'technova_database';
 
         await tempConnection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
         await tempConnection.query(`USE \`${dbName}\`;`);
 
-        // 1. Tabela: categorias
+        await tempConnection.query(`SET FOREIGN_KEY_CHECKS = 0;`);
+
+        // Tabela: categorias
         await tempConnection.query(`
             CREATE TABLE IF NOT EXISTS \`categorias\` (
               \`id_categoria\` INT NOT NULL AUTO_INCREMENT,
@@ -67,7 +68,7 @@ export async function initializeDatabase() {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         `);
 
-        // 2. Tabela: produtos
+        // Tabela: produtos
         await tempConnection.query(`
             CREATE TABLE IF NOT EXISTS \`produtos\` (
               \`id_produto\` INT NOT NULL AUTO_INCREMENT,
@@ -82,7 +83,7 @@ export async function initializeDatabase() {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         `);
 
-        // 3. Tabela: pedidos
+        // Tabela: pedidos
         await tempConnection.query(`
             CREATE TABLE IF NOT EXISTS \`pedidos\` (
               \`id_pedido\` INT NOT NULL AUTO_INCREMENT,
@@ -93,7 +94,7 @@ export async function initializeDatabase() {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         `);
 
-        // 4. Tabela: itens_pedido
+        // Tabela: itens_pedido
         await tempConnection.query(`
             CREATE TABLE IF NOT EXISTS \`itens_pedido\` (
               \`id_item_pedido\` INT NOT NULL AUTO_INCREMENT,
@@ -108,8 +109,10 @@ export async function initializeDatabase() {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         `);
 
-        await tempConnection.end();
-        console.log("Banco de dados e tabelas verificados/criados com sucesso de acordo com o schema oficial.");
+        await tempConnection.query(`SET FOREIGN_KEY_CHECKS = 1;`);
+
+        await tempConnection.end(); // Fecha a conexão temporária de setup
+        console.log("Banco de dados e tabelas checados com sucesso.");
     } catch (error) {
         console.error("Erro ao criar o banco ou as tabelas:", error);
         throw error;
