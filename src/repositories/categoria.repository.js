@@ -1,4 +1,4 @@
-import { db } from "../configs/database.js";
+import { db } from "../configs/Database.js";
 
 const categoriaRepository = {
     criar: async (categoria) => {
