@@ -7,6 +7,11 @@ const app = express();
 app.use(express.json());
 app.use('/', routes);
 
+app.use(
+    "/uploads/images",
+    express.static("uploads/images")
+)
+
 
 initializeDatabase().then(() => {
     app.listen(process.env.SERVER_PORT, () => {
